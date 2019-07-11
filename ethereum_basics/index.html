@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My First Exercise</title>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script>
+
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+
+    var simplestorageContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"number","type":"uint256"}],"name":"setNumber","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getNumber","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]);
+    var simplestorage = simplestorageContract.at("0xc70Bc140555b9d0A5d067643A7A698EED1FbE05a");
+    console.log(simplestorage);
+
+    function setNumber() {
+
+        var input = document.getElementById('testnumber');
+        console.log(input.value);
+        simplestorage.setNumber(input.value, {gas:1400000, from: web3.eth.accounts[0]}, function(){
+            console.log("Number is set");
+            })
+
+    }
+
+    function getNumber() {
+
+        var output = document.getElementById('result');
+        simplestorage.getNumber(function(error,data) {
+        output.innerText=data.toLocaleString()});
+
+    }
+    </script>
+
+
+</head>
+
+
+My First Exercise
+<input type="text" id="testnumber">
+<button onclick="setNumber()">SetNumber</button>
+<button onclick="getNumber()">GetNumber</button>
+<span id="result"></span>
+
+</body>
+</html>
